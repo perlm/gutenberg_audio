@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<body>
+  <h1>Book Sections</h1>
+
+  <p>This book has {{ sections|length }} sections.</p>
+
+  <ul>
+    {% for s in sections %}
+      <li>
+        Section {{ s.index }} ('{{ s.starting_text }}...")
+        —
+	<form action="/generate" method="post">
+	<input type="hidden" name="book_url" value="{{ book_url }}">
+	<input type="hidden" name="section_num" value="{{ s.index }}">
+	<input type="hidden" name="title" value="{{ title }}">
+	<input type="hidden" name="authors" value="{{ authors }}">
+	<button type="submit">Generate audio for Section {{ s.index }}</button>
+	</form>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <br>
+  <a href="/">Analyze another book</a>
+</body>
+</html>
+

@@ -1,0 +1,19 @@
+<h1>Search Results</h1>
+<ul>
+  {% for book in books %}
+    <li>
+      <strong>{{ book.title }}</strong> by {{ book.authors }}
+      <br>
+      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form{{ loop.index }}').submit();">
+        Select this book
+      </a>
+
+      <form id="form{{ loop.index }}" action="/analyse" method="post" style="display:none;">
+        <input type="hidden" name="book_url" value="{{ book.url }}">
+	<input type="hidden" name="title" value="{{ book.title }}">
+        <input type="hidden" name="authors" value="{{ book.authors }}">
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+
