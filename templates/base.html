@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Gutenberg Audio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Gutenberg Audio</h1>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <small>
+		Books are provided by <a href="https://www.gutenberg.org/" target="_blank" rel="noopener">
+		Project Gutenberg</a>. This app only generates audio for personal use. 
+		Project Gutenberg-tm and the Project Gutenberg Literary Archive Foundation 
+		are trademarks of Project Gutenberg Literary Archive Foundation.
+	    <br>
+        <a href="{{ url_for('index') }}">Home</a>
+        </small>
+    </footer>
+</body>
+</html>
+

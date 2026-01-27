@@ -1,4 +1,9 @@
-<h1>Search Results</h1>
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Search Results</h2>
+
 <ul>
   {% for book in books %}
     <li>
@@ -17,3 +22,4 @@
   {% endfor %}
 </ul>
 
+{% endblock %}

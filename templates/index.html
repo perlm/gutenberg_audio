@@ -1,16 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Gutenberg Audio</title>
-</head>
-<body>
-    <h1>Gutenberg Audio</h1>
+{% extends "base.html" %}
 
+{% block content %}
+	<h2>Search for Gutenberg Texts</h2>
 	<form action="/search" method="get">
-        <label>Hey, why don't you search for a Gutenberg Book?:</label><br>
+	<label>Hey, you want to listen to a Gutenberg Book?</label><br>
 	  <input type="text" name="query" placeholder="Author or Title" required>
 	  <button type="submit">Search</button>
 	</form>
-</body>
-</html>
+
+	<br>
+	<h3>Recently Viewed</h3>
+        {% if recent_books %}
+		<ul>
+		    {% for b in recent_books %}
+		     <li>
+		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form{{ loop.index }}').submit();">
+			      '{{ b.title }}' by {{ b.authors }}
+		      </a>
+
+		      <form id="form{{ loop.index }}" action="/analyse" method="post" style="display:none;">
+			<input type="hidden" name="book_url" value="{{ b.book_url }}">
+			<input type="hidden" name="title" value="{{ b.title }}">
+			<input type="hidden" name="authors" value="{{ b.authors }}">
+		      </form>
+		     </li>
+		    {% endfor %}
+		</ul>
+        {% else %}
+		<ul>
+	 	 <li>
+		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+			      'The Critique of Pure Reason' by Kant
+		      </a>
+
+		      <form id="form1" action="/analyse" method="post" style="display:none;">
+			<input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/4280.txt.utf-8">
+			<input type="hidden" name="title" value="The Critique of Pure Reason">
+			<input type="hidden" name="authors" value="Kant, Immanuel">
+		      </form>
+		 </li>
+	 	 <li>
+		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form2').submit();">
+			      'Alice's Adventures in Wonderland' by Lewis Carroll
+		      </a>
+
+		      <form id="form2" action="/analyse" method="post" style="display:none;">
+			<input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/11.txt.utf-8">
+			<input type="hidden" name="title" value="Alice's Adventures in Wonderland">
+			<input type="hidden" name="authors" value="Carroll, Lewis">
+		      </form>
+		 </li>
+		</ul>
+        {% endif %}
+
+{% endblock %}
 
