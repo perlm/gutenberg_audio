@@ -156,7 +156,7 @@ if __name__ == "__main__":
     static_dir = os.path.join(app.root_path, "static")
     if not os.path.exists(static_dir):
         os.makedirs(static_dir)
-    if not os.path.exists(os.path.join('static', AUDIO_DIR)):
-        os.makedirs(os.path.join('static', AUDIO_DIR))
+    if not os.path.exists(os.path.join(static_dir, AUDIO_DIR)):
+        os.makedirs(os.path.join(static_dir, AUDIO_DIR))
     app.run(debug=True)
 
