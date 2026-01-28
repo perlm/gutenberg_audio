@@ -1,5 +1,5 @@
 flask
 requests
-TTS==0.22.0
+coqui-tts
 soundfile
 gunicorn
