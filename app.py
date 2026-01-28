@@ -23,6 +23,7 @@ import soundfile as sf
 tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
 #tts_coqui = TTS(model_name="tts_models/en/ljspeech/glow-tts", progress_bar=False)
 
+
 app = Flask(__name__)
 
 CHAPTER_LENGTH = 10000
@@ -33,7 +34,6 @@ RECENT_BOOKS = []
 CURRENT_BOOK_CHAPTERS = []
         
 default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
-
 
 def clean_gutenberg_text(text):
     # clean text maybe
