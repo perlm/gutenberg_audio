@@ -1,4 +1,5 @@
 flask
 requests
-gtts
+TTS
+soundfile
 gunicorn
