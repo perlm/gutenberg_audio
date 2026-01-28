@@ -1,5 +1,5 @@
 flask
 requests
-TTS
+TTS==0.22.0
 soundfile
 gunicorn
