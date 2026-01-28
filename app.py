@@ -1,51 +1,116 @@
-from flask import Flask, request, send_file, render_template, redirect, url_for
+from flask import Flask, request, send_file, render_template, redirect, url_for, Response, stream_with_context
 import requests
-from gtts import gTTS
+import string
 import os
 import re
+from io import BytesIO
+from time import sleep
+
+# gtts booted me...
+#from gtts import gTTS
+
+# tts is very finicky
+from TTS.api import TTS
+import soundfile as sf
+
+# kittens?
+#import numpy as np
+#from kittentts import KittenTTS
+#kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
+#import soundfile as sf
+
+
+tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
+#tts_coqui = TTS(model_name="tts_models/en/ljspeech/glow-tts", progress_bar=False)
 
 app = Flask(__name__)
 
-AUDIO_DIR = "audio"
-MAX_CHARS = 4000  # gTTS-safe section size
+CHAPTER_LENGTH = 10000
+STREAMING_CHARS = 100
 RECENT_BOOKS = []
 
-static_dir = os.path.join(app.root_path, "static")
-if not os.path.exists(static_dir):
-    os.makedirs(static_dir, exist_ok=True)
-if not os.path.exists(os.path.join(static_dir, AUDIO_DIR)):
-    os.makedirs(os.path.join(static_dir, AUDIO_DIR), exist_ok=True)
+# store the whole book in global? Seems dumb?
+CURRENT_BOOK_CHAPTERS = []
+        
+default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
+
 
 def clean_gutenberg_text(text):
+    # clean text maybe
+
+    text = text.replace('\r\n', '\n')
+
+    # Convert multiple blank lines to a single blank line
+    text = re.sub(r'\n\s*\n', '\n\n', text)
+
+    # Replace single newlines (inside paragraphs) with a space
+    text = re.sub(r'(?<!\n)\n(?!\n)', ' ', text)
+    text = re.sub(r' +', ' ', text)  # multiple spaces → single space
+    text = re.sub(r'_', '', text)  # no underscores
+
+    allowed_chars = string.ascii_letters + string.digits + string.punctuation + ' \n\t'
+    text = ''.join(c for c in text if c in allowed_chars)
+
+    text = text.strip()
+
     start = re.search(r"\*\*\* START OF.*?\*\*\*", text)
     end = re.search(r"\*\*\* END OF.*?\*\*\*", text)
-
     if start and end:
         return text[start.end():end.start()]
     else:
         return text
 
-def section_text(text, max_chars=MAX_CHARS):
-    """Split text into sections without cutting sentences."""
+def section_text(text, mode = "paragraph", max_chars=CHAPTER_LENGTH):
+    """
+    Split Gutenberg text into sentences or paragraphs.
+
+    Args:
+        text (str): Raw text from Gutenberg.
+        mode (str): "sentence" or "paragraph".
+
+    Returns:
+        list of str: Cleaned sentences or paragraphs.
+    """
+
+    # Choose regex based on mode
+    if mode == "paragraph":
+        # Paragraphs split by double newline
+        split_pattern = r'\n\n+'
+    elif mode == "sentence":
+        # Sentences split by ., !, ?, or newline
+        split_pattern = r'(?<=[.!?\n])+'
+    else:
+        raise ValueError("mode must be 'sentence' or 'paragraph'")
+
     sections = []
     current = ""
 
-    for paragraph in text.split("\n"):
-        if len(current) + len(paragraph) < max_chars:
-            current += paragraph + "\n"
+    for block in re.split(split_pattern, text):
+        if len(current) + len(block) < max_chars:
+            current += block + ' '
+        elif len(current)<=10:
+            current += block + ' '
         else:
             sections.append(current.strip())
-            current = paragraph + "\n"
+            current = block + ' '
 
     if current.strip():
         sections.append(current.strip())
 
     return sections
 
-def remove_space_punctuation_isalnum(text):
-    """Removes all non-alphanumeric characters (including spaces and punctuation) from a string."""
-    cleaned_list = [char for char in text if char.isalnum()]
-    return "".join(cleaned_list)
+@app.route("/audio/<int:sentence_id>")
+def serve_sentence(sentence_id):
+    fp = BytesIO()
+    try:
+        tts = tts_coqui.tts(CURRENT_BOOK_CHAPTERS[sentence_id-1])
+        sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+        fp.seek(0)
+        return send_file(fp, mimetype="audio/mpeg") #wav")
+    except:
+        sf.write(fp, default_sound, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+        fp.seek(0)
+        return send_file(fp, mimetype="audio/mpeg") #wav")
 
 @app.route('/')
 def index():
@@ -100,63 +165,25 @@ def show_book():
     resp = requests.get(book_url)
     resp.raise_for_status()
 
-    text = clean_gutenberg_text(resp.text)
-    sections = section_text(text)
+    sections = section_text(clean_gutenberg_text(resp.text), mode = "sentence", max_chars=STREAMING_CHARS)
 
-    book = remove_space_punctuation_isalnum(title+authors)
+    global CURRENT_BOOK_CHAPTERS
+    CURRENT_BOOK_CHAPTERS = sections
 
     section_meta = [
         {"index": i + 1, 
-            "starting_text":s[0:100],
-            "file_present": os.path.exists(f"{os.path.join(app.root_path,'static', AUDIO_DIR)}/{book}_{i+1}.mp3"),
-            "file_location": f"{AUDIO_DIR}/{book}_{i+1}.mp3"
-            #"chars": len(s)
+            "text":s
             }
         for i, s in enumerate(sections)
     ]
 
     return render_template(
-        "sections.html",
+        "show_book.html",
         book_url=book_url,
         title=title,
         authors=authors,
         sections=section_meta
     )
-
-
-@app.route("/generate", methods=['POST'])
-def generate():
-    book_url = request.form.get("book_url")
-    title = request.form.get("title")
-    authors = request.form.get("authors")
-    section_num = int(request.form.get("section_num"))
-
-    resp = requests.get(book_url)
-    resp.raise_for_status()
-    text = clean_gutenberg_text(resp.text)
-
-    sections = section_text(text)
-
-    if section_num < 1 or section_num > len(sections):
-        return "Invalid section", 400
-
-    book = remove_space_punctuation_isalnum(title+authors)
-    #filename = f"static/{AUDIO_DIR}/{book}_{section_num}.mp3"
-    filename = f"{os.path.join(app.root_path,'static', AUDIO_DIR)}/{book}_{section_num}.mp3"
-
-    tts = gTTS(sections[section_num - 1], lang="en")
-    tts.save(filename)
-
-    # send_file may be an alternative setup? Not sure.
-    #return send_file(
-    #    filename,
-    #    as_attachment=True,
-    #    download_name=f"{book}_{section_num}.mp3"
-    #)
-
-    # file is already saved to static, so just need to reload page,
-    # so that the file is available to play. :--)
-    return redirect(url_for("show_book", book_url = book_url, title = title, authors = authors))
 
 if __name__ == "__main__":
     app.run(debug=True)

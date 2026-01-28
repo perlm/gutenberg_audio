@@ -1,0 +1,89 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.sentence {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.sentence:hover {
+  background: #f0f0f0;
+}
+
+.sentence.playing {
+  background: #dff0ff;
+}
+</style>
+
+<h2>Listen to '{{ title }}'</h2>
+
+<button id="toggle">Autoplay</button>
+
+    {% for s in sections %}
+
+        <div class="sentence"
+         data-index="{{ s.index }}"
+         data-src="/audio/{{ s.index }}">
+	      {{ s.text }}
+	</div>
+    <br>
+
+    {% endfor %}
+
+<audio id="player"></audio>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sentences = document.querySelectorAll(".sentence");
+  const player = document.getElementById("player");
+  let currentIndex = null;
+
+  function playSentence(index) {
+    const s = sentences[index];
+    if (!s) return;
+
+    sentences.forEach(el => el.classList.remove("playing"));
+    s.classList.add("playing");
+
+    player.src = s.dataset.src;
+    player.play();
+
+    currentIndex = index;
+  }
+
+  // Click a sentence → hear it
+  sentences.forEach((s, i) => {
+    s.addEventListener("click", () => playSentence(i));
+  });
+
+  player.addEventListener("ended", () => {
+      console.log("ENDED fired at index", currentIndex);
+      if (!autoplayEnabled) return;
+      playSentence(currentIndex + 1);
+  });
+});
+
+const toggle = document.getElementById("toggle");
+
+toggle.onclick = () => {
+  if (player.paused) {
+    autoplayEnabled = true;
+    player.play();
+    toggle.textContent = "Pause";
+  } else {
+    autoplayEnabled = false;
+    player.pause();
+    toggle.textContent = "Autoplay";
+  }
+};
+
+</script>
+
+{% endblock %}
