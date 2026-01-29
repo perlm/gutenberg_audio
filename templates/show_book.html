@@ -22,6 +22,8 @@ Click a sentence to play. Please allow time for audio to generate.
 
 .sentence.playing {
   background: #dff0ff;
+  font-weight: 1000;
+  transition: transform 0.2s;
 }
 
 </style>
@@ -54,6 +56,13 @@ Click a sentence to play. Please allow time for audio to generate.
 {% block scripts %}
 
 <script>
+// Define the function outside
+function vibrateIfPossible(duration = 50) {
+  if (navigator.vibrate) {
+    navigator.vibrate(duration);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const sentences = document.querySelectorAll(".sentence");
   const player = document.getElementById("player");
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Click a sentence → hear it
   sentences.forEach((s, i) => {
     s.addEventListener("click", () => playSentence(i));
+    vibrateIfPossible(50);
   });
 
   player.addEventListener("ended", () => {
@@ -110,14 +120,17 @@ document.addEventListener("DOMContentLoaded", () => {
       player.pause();
       playPauseBtn.textContent = "▶️";
     }
+    vibrateIfPossible(50);
   };
 
   document.getElementById("nextBtn").onclick = () => {
     playSentence(currentIndex + 1);
+    vibrateIfPossible(50);
   };
 
   document.getElementById("prevBtn").onclick = () => {
     playSentence(Math.max(0, currentIndex - 1));
+    vibrateIfPossible(50);
   };
 
   function updateToggleLabel() {
@@ -127,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   toggle.onclick = () => {
     autoplayEnabled = !autoplayEnabled;
     updateToggleLabel();
+    vibrateIfPossible(50);
   };
 
   updateToggleLabel();
