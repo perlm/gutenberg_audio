@@ -4,6 +4,8 @@ import string
 import os
 import re
 from io import BytesIO
+import logging
+
 #from time import sleep
 
 # gtts
@@ -115,7 +117,7 @@ def serve_sentence(sentence_id):
     except Exception as e:
         sf.write(fp, default_sound, 22050, format='WAV') #MP3') #WAV')
         fp.seek(0)
-        print("Caught an exception:", type(e).__name__, e)
+        logging.error("Caught an exception:", type(e).__name__, e)
         #raise  # optional, re-raise if you want to see the full traceback
         return send_file(fp, mimetype="audio/wav") #mpeg") #wav")
 
