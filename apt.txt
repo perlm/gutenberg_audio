@@ -1,1 +1,2 @@
+espeak-ng
 libespeak-ng1
