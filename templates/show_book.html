@@ -1,12 +1,19 @@
 
 {% extends "base.html" %}
 
+{% block header %}
+<h1>Listen to '{{ title }}'</h1>
+Click a sentence to play. Please allow time for audio to generate.
+{% endblock %}
+
 {% block content %}
 
 <style>
 .sentence {
   cursor: pointer;
   padding: 4px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .sentence:hover {
@@ -16,13 +23,17 @@
 .sentence.playing {
   background: #dff0ff;
 }
+
 </style>
 
-<h2>Listen to '{{ title }}'</h2>
-Click a sentence to play. Please allow time for audio to generate.
-<br><br>
 
-<button id="toggle">Autoplay</button>
+<div id="audio-controls">
+  <button id="toggle">Autoplay</button>
+  <button id="prevBtn">⏮</button>
+  <button id="playPauseBtn">▶️</button>
+  <button id="nextBtn">⏭</button>
+</div>
+
 <br><br>
 
     {% for s in sections %}
@@ -46,14 +57,28 @@ Click a sentence to play. Please allow time for audio to generate.
 document.addEventListener("DOMContentLoaded", () => {
   const sentences = document.querySelectorAll(".sentence");
   const player = document.getElementById("player");
-  let currentIndex = null;
+  const toggle = document.getElementById("toggle");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+
+  let autoplayEnabled = true;
+  let currentIndex = 0;
+
+  // Keep track if we've ever started playing
+  let started = false;
 
   function playSentence(index) {
+    started = true;
+    playPauseBtn.textContent = "⏸ "
     const s = sentences[index];
     if (!s) return;
 
     sentences.forEach(el => el.classList.remove("playing"));
     s.classList.add("playing");
+
+    s.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
 
     player.src = s.dataset.src;
     player.play();
@@ -68,25 +93,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   player.addEventListener("ended", () => {
       console.log("ENDED fired at index", currentIndex);
+      started = true;
       if (!autoplayEnabled) return;
       playSentence(currentIndex + 1);
   });
+
+  playPauseBtn.onclick = () => {
+    if (!started) {
+      playSentence(currentIndex);
+      playPauseBtn.textContent = "⏸";
+    }
+    else if (player.paused) {
+      player.play();
+      playPauseBtn.textContent = "⏸";
+    } else {
+      player.pause();
+      playPauseBtn.textContent = "▶️";
+    }
+  };
+
+  document.getElementById("nextBtn").onclick = () => {
+    playSentence(currentIndex + 1);
+  };
+
+  document.getElementById("prevBtn").onclick = () => {
+    playSentence(Math.max(0, currentIndex - 1));
+  };
+
+  function updateToggleLabel() {
+    toggle.textContent = autoplayEnabled ? "Autoplay: ON" : "Autoplay: OFF";
+  }
+
+  toggle.onclick = () => {
+    autoplayEnabled = !autoplayEnabled;
+    updateToggleLabel();
+  };
+
+  updateToggleLabel();
 });
 
-const toggle = document.getElementById("toggle");
-
-let autoplayEnabled = true;
-
-function updateToggleLabel() {
-  toggle.textContent = autoplayEnabled ? "Autoplay: ON" : "Autoplay: OFF";
-}
-
-toggle.onclick = () => {
-  autoplayEnabled = !autoplayEnabled;
-  updateToggleLabel();
-};
-
-updateToggleLabel();
 
 
 </script>

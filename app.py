@@ -129,7 +129,7 @@ def search():
         return "Please provide a search query", 400
 
     url = f"https://gutendex.com/books/?search={query}"
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=10)
     resp.raise_for_status()
     data = resp.json()
 
@@ -168,7 +168,7 @@ def show_book():
     #authors = request.args.get('authors')
     
     # Fetch book text
-    resp = requests.get(book_url)
+    resp = requests.get(book_url, timeout=10)
     resp.raise_for_status()
 
     sections = section_text(clean_gutenberg_text(resp.text), mode = "sentence", max_chars=STREAMING_CHARS)
