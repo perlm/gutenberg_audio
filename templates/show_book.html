@@ -19,8 +19,11 @@
 </style>
 
 <h2>Listen to '{{ title }}'</h2>
+Please allow time for audio to generate.
+<br><br>
 
 <button id="toggle">Autoplay</button>
+<br><br>
 
     {% for s in sections %}
 
@@ -71,6 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const toggle = document.getElementById("toggle");
+
+let autoplayEnabled = true;
 
 toggle.onclick = () => {
   if (player.paused) {

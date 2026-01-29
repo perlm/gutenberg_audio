@@ -1,15 +1,5 @@
-# Old, self-contained Coqui TTS version that works without separate Coqpit
-TTS==0.17.0
-
-# Optional: for audio file output
-soundfile>=0.10.3.post1
-
-# If you want to use torch backend (CPU-only is fine)
-torch>=1.13.1,<2.0
-torchaudio>=0.13.1,<2.0
-
-# Flask for your web app
 Flask>=2.3.2
-
-requests
+requests>=2.31.0
+soundfile>=0.12.1
+kittentts>=0.1.0
 gunicorn

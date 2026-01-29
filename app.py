@@ -6,23 +6,20 @@ import re
 from io import BytesIO
 #from time import sleep
 
-# gtts booted me...
+# gtts
 #from gtts import gTTS
 
-# tts is very finicky
-from TTS.api import TTS
-import soundfile as sf
-
-# kittens?
-#import numpy as np
-#from kittentts import KittenTTS
-#kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
+# tts
+#from TTS.api import TTS
 #import soundfile as sf
 
+# kitten
+#import numpy as np
+from kittentts import KittenTTS
+import soundfile as sf
 
-tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
-#tts_coqui = TTS(model_name="tts_models/en/ljspeech/glow-tts", progress_bar=False)
-
+kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
+#tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
 
 app = Flask(__name__)
 
@@ -33,7 +30,8 @@ RECENT_BOOKS = []
 # store the whole book in global? Seems dumb?
 CURRENT_BOOK_CHAPTERS = []
         
-default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
+#default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
+default_sound = kittenstts.generate('Cough cough, excuse me, where was I')
 
 def clean_gutenberg_text(text):
     # clean text maybe
@@ -103,14 +101,20 @@ def section_text(text, mode = "paragraph", max_chars=CHAPTER_LENGTH):
 def serve_sentence(sentence_id):
     fp = BytesIO()
     try:
-        tts = tts_coqui.tts(CURRENT_BOOK_CHAPTERS[sentence_id-1])
-        sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+        #coqui
+        #tts = tts_coqui.tts(CURRENT_BOOK_CHAPTERS[sentence_id-1])
+        #sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+
+        #kitten
+        tts = kittenstts.generate(CURRENT_BOOK_CHAPTERS[sentence_id-1])
+        #pcm16 = (tts * 32767).astype(np.int16)
+        sf.write(fp, tts, 22050, format='WAV')
         fp.seek(0)
-        return send_file(fp, mimetype="audio/mpeg") #wav")
+        return send_file(fp, mimetype="audio/wav") #mpeg") #wav")
     except:
-        sf.write(fp, default_sound, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+        sf.write(fp, default_sound, 22050, format='WAV') #MP3') #WAV')
         fp.seek(0)
-        return send_file(fp, mimetype="audio/mpeg") #wav")
+        return send_file(fp, mimetype="audio/wav") #mpeg") #wav")
 
 @app.route('/')
 def index():
