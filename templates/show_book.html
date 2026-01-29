@@ -19,7 +19,7 @@
 </style>
 
 <h2>Listen to '{{ title }}'</h2>
-Please allow time for audio to generate.
+Click a sentence to play. Please allow time for audio to generate.
 <br><br>
 
 <button id="toggle">Autoplay</button>
@@ -29,7 +29,7 @@ Please allow time for audio to generate.
 
         <div class="sentence"
          data-index="{{ s.index }}"
-         data-src="/audio/{{ s.index }}">
+         data-src="/audio/{{ s.text }}">
 	      {{ s.text }}
 	</div>
     <br>

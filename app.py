@@ -31,7 +31,7 @@ STREAMING_CHARS = 100
 RECENT_BOOKS = []
 
 # store the whole book in global? Seems dumb?
-CURRENT_BOOK_CHAPTERS = []
+#CURRENT_BOOK_CHAPTERS = []
         
 #default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
 default_sound = kittenstts.generate('Cough cough, excuse me, where was I')
@@ -100,8 +100,10 @@ def section_text(text, mode = "paragraph", max_chars=CHAPTER_LENGTH):
 
     return sections
 
-@app.route("/audio/<int:sentence_id>")
-def serve_sentence(sentence_id):
+#@app.route("/audio/<int:sentence_id>")
+#def serve_sentence(sentence_id):
+@app.route("/audio/<sentence>")
+def serve_sentence(sentence):
     fp = BytesIO()
     try:
         #coqui
@@ -109,7 +111,8 @@ def serve_sentence(sentence_id):
         #sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
 
         #kitten
-        tts = kittenstts.generate(CURRENT_BOOK_CHAPTERS[sentence_id-1])
+        #tts = kittenstts.generate(CURRENT_BOOK_CHAPTERS[sentence_id-1])
+        tts = kittenstts.generate(sentence)
         #pcm16 = (tts * 32767).astype(np.int16)
         sf.write(fp, tts, 22050, format='WAV')
         fp.seek(0)
@@ -176,8 +179,8 @@ def show_book():
 
     sections = section_text(clean_gutenberg_text(resp.text), mode = "sentence", max_chars=STREAMING_CHARS)
 
-    global CURRENT_BOOK_CHAPTERS
-    CURRENT_BOOK_CHAPTERS = sections
+    #global CURRENT_BOOK_CHAPTERS
+    #CURRENT_BOOK_CHAPTERS = sections
 
     section_meta = [
         {"index": i + 1, 
