@@ -77,17 +77,17 @@ const toggle = document.getElementById("toggle");
 
 let autoplayEnabled = true;
 
+function updateToggleLabel() {
+  toggle.textContent = autoplayEnabled ? "Autoplay: ON" : "Autoplay: OFF";
+}
+
 toggle.onclick = () => {
-  if (player.paused) {
-    autoplayEnabled = true;
-    player.play();
-    toggle.textContent = "Pause";
-  } else {
-    autoplayEnabled = false;
-    player.pause();
-    toggle.textContent = "Autoplay";
-  }
+  autoplayEnabled = !autoplayEnabled;
+  updateToggleLabel();
 };
+
+updateToggleLabel();
+
 
 </script>
 

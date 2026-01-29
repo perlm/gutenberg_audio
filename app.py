@@ -4,12 +4,11 @@ import string
 import os
 import re
 from io import BytesIO
-import logging
-
-#from time import sleep
+#import logging
+from time import sleep
 
 # gtts
-#from gtts import gTTS
+from gtts import gTTS
 
 # tts
 #from TTS.api import TTS
@@ -17,11 +16,11 @@ import logging
 
 # kitten
 #import numpy as np
-from kittentts import KittenTTS
-import soundfile as sf
+#from kittentts import KittenTTS
+#import soundfile as sf
 
+#kittenstts = KittenTTS()
 #kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
-kittenstts = KittenTTS()
 #tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
 
 app = Flask(__name__)
@@ -30,11 +29,10 @@ CHAPTER_LENGTH = 10000
 STREAMING_CHARS = 100
 RECENT_BOOKS = []
 
-# store the whole book in global? Seems dumb?
-#CURRENT_BOOK_CHAPTERS = []
-        
-#default_sound = tts_coqui.tts('Cough cough excuse me excuse me')
-default_sound = kittenstts.generate('Cough cough, excuse me, where was I')
+# todo - coqui would fail to generate sometimes, gtts rate limits.
+# Might be useful to have a backup. kitten is a bit heavy for that purpose.
+# pyttsx3 would be minimal fall back?
+#default_sound = kittenstts.generate('Cough cough, excuse me, now where was I.')
 
 def clean_gutenberg_text(text):
     # clean text maybe
@@ -100,29 +98,25 @@ def section_text(text, mode = "paragraph", max_chars=CHAPTER_LENGTH):
 
     return sections
 
-#@app.route("/audio/<int:sentence_id>")
-#def serve_sentence(sentence_id):
 @app.route("/audio/<sentence>")
 def serve_sentence(sentence):
-    fp = BytesIO()
-    try:
-        #coqui
-        #tts = tts_coqui.tts(CURRENT_BOOK_CHAPTERS[sentence_id-1])
-        #sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+    sleep(0.5) # primarily concerned about gtts rate limits
 
-        #kitten
-        #tts = kittenstts.generate(CURRENT_BOOK_CHAPTERS[sentence_id-1])
-        tts = kittenstts.generate(sentence)
-        #pcm16 = (tts * 32767).astype(np.int16)
-        sf.write(fp, tts, 22050, format='WAV')
-        fp.seek(0)
-        return send_file(fp, mimetype="audio/wav") #mpeg") #wav")
-    except Exception as e:
-        sf.write(fp, default_sound, 22050, format='WAV') #MP3') #WAV')
-        fp.seek(0)
-        logging.error("Caught an exception:", type(e).__name__, e)
-        #raise  # optional, re-raise if you want to see the full traceback
-        return send_file(fp, mimetype="audio/wav") #mpeg") #wav")
+    fp = BytesIO()
+    ## coqui
+    #tts = tts_coqui.tts(sentence)
+    #sf.write(fp, tts, tts_coqui.synthesizer.output_sample_rate, format='MP3') #WAV')
+
+    ## kitten
+    #tts = kittenstts.generate(sentence)
+    #sf.write(fp, tts, 22050, format='WAV')
+
+    ## gtts
+    tts = gTTS(text=sentence, lang="en")
+    tts.write_to_fp(fp)
+
+    fp.seek(0)
+    return send_file(fp, mimetype="audio/mpeg") #mpeg") #wav")
 
 @app.route('/')
 def index():
@@ -179,9 +173,6 @@ def show_book():
 
     sections = section_text(clean_gutenberg_text(resp.text), mode = "sentence", max_chars=STREAMING_CHARS)
 
-    #global CURRENT_BOOK_CHAPTERS
-    #CURRENT_BOOK_CHAPTERS = sections
-
     section_meta = [
         {"index": i + 1, 
             "text":s
@@ -191,9 +182,9 @@ def show_book():
 
     return render_template(
         "show_book.html",
-        book_url=book_url,
+        #book_url=book_url,
         title=title,
-        authors=authors,
+        #authors=authors,
         sections=section_meta
     )
 
@@ -202,4 +193,3 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     # Run Flask on 0.0.0.0 so Docker/Render can see it
     app.run(host="0.0.0.0", port=port)
-    #app.run(debug=True)
