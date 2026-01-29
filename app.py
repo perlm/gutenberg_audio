@@ -159,13 +159,13 @@ def analyse():
         # keep only last 5 books
         RECENT_BOOKS = RECENT_BOOKS[-5:]
 
-    return redirect(url_for("show_book", book_url = book_url, title = title, authors = authors))
+    return redirect(url_for("show_book", book_url = book_url, title = title)) #, authors = authors))
 
 @app.route('/book')
 def show_book():
     book_url = request.args.get('book_url')
     title = request.args.get('title')
-    authors = request.args.get('authors')
+    #authors = request.args.get('authors')
     
     # Fetch book text
     resp = requests.get(book_url)
