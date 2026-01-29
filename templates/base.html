@@ -13,6 +13,22 @@
 <body>
     <header>
 	    {% block header %}<h1>Gutenberg Audio</h1>{% endblock %}
+
+	    <button id="install-btn"
+        style="display:none;
+               position: fixed;
+               bottom: 20px;
+               right: 20px;
+               z-index: 1000;
+               padding: 10px 16px;
+               background-color: #007bff;
+               color: white;
+               border: none;
+               border-radius: 8px;
+               box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+               cursor: pointer;">
+	       Install App
+	</button>
     </header>
 
     <main>
@@ -32,12 +48,38 @@
 
     <!-- Service Worker registration -->
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/static/service-worker.js')
-          .then(() => console.log('Service Worker registered'))
-          .catch(err => console.log('SW registration failed:', err));
-      }
-    </script>
+	if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('/static/service-worker.js')
+	  .then(() => console.log('Service Worker registered'))
+	  .catch(err => console.log('SW registration failed:', err));
+	}
+
+	let deferredPrompt;
+
+	window.addEventListener('beforeinstallprompt', (e) => {
+	  e.preventDefault(); // prevent automatic prompt
+	  deferredPrompt = e;
+
+	  const installBtn = document.getElementById('install-btn');
+	  installBtn.style.display = 'block';
+
+	  installBtn.addEventListener('click', async () => {
+	    installBtn.style.display = 'none';
+	    deferredPrompt.prompt();
+	    const { outcome } = await deferredPrompt.userChoice;
+	    console.log('User response to install:', outcome);
+	    deferredPrompt = null;
+	  });
+	});
+
+	window.addEventListener('appinstalled', () => {
+	  const installBtn = document.getElementById('install-btn');
+	  installBtn.style.display = 'none';
+	  console.log('App installed successfully');
+	});
+
+	</script>
+
     {% block scripts %}{% endblock %}
 </body>
 </html>
