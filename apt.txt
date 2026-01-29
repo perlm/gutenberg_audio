@@ -1,3 +1,0 @@
-espeak-ng
-espeak
-libespeak-ng1
