@@ -18,7 +18,8 @@ from io import BytesIO
 from kittentts import KittenTTS
 import soundfile as sf
 
-kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
+#kittenstts = KittenTTS("KittenML/kitten-tts-nano-0.2")
+kittenstts = KittenTTS()
 #tts_coqui = TTS(model_name="tts_models/en/ljspeech/speedy-speech", progress_bar=False)
 
 app = Flask(__name__)
