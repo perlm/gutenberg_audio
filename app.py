@@ -122,8 +122,10 @@ def serve_sentence(sentence):
 def index():
     return render_template("index.html", recent_books = RECENT_BOOKS)
 
-@app.route("/search")
-def search():
+# old code searched gutendex for author/title.
+# this api is not currently responding
+@app.route("/search_old")
+def search_old():
     query = request.args.get("query")
     if not query:
         return "Please provide a search query", 400
@@ -144,6 +146,15 @@ def search():
             books.append({"title": title, "authors": authors, "url": txt_url})
 
     return render_template("search_results.html", books=books)
+
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    if not query:
+        return "Please provide a search query", 400
+    book_url = f"https://www.gutenberg.org/cache/epub/{query}/pg{query}.txt"
+    title = "Gutenberg Book"
+    return redirect(url_for("show_book", book_url = book_url, title = title)) #, authors = authors))
 
 @app.route('/analyse', methods=['POST'])
 def analyse():

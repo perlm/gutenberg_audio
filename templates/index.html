@@ -2,9 +2,10 @@
 
 {% block content %}
 	<h2>Search for Gutenberg Texts</h2>
+
 	<form action="/search" method="get">
 	<label>Hey, you want to listen to a Gutenberg Book?</label><br>
-	  <input type="text" name="query" placeholder="Author or Title" required>
+	  <input type="text" name="query" placeholder="Gutenberg ID Number" required>
 	  <button type="submit">Search</button>
 	</form>
 
@@ -28,52 +29,410 @@
 		</ul>
         {% else %}
 		<ul>
-	 	 <li>
-		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
-			      'Frankenstein; Or, The Modern Prometheus' by Mary Wollstonecraft Shelley
-		      </a>
 
-		      <form id="form1" action="/analyse" method="post" style="display:none;">
-			<input type="hidden" name="book_url" value="https://www.gutenberg.org/cache/epub/84/pg84.txt">
-			<input type="hidden" name="title" value="Frankenstein; Or, The Modern Prometheus">
-			<input type="hidden" name="authors" value="Shelley, Mary Wollstonecraft">
-		      </form>
-		 </li>
-	 	 <li>
-		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form2').submit();">
-			      'Moby Dick; Or, The Whale' by Herman Melville
-		      </a>
 
-		      <form id="form2" action="/analyse" method="post" style="display:none;">
-			<input type="hidden" name="book_url" value="https://www.gutenberg.org/cache/epub/2701/pg2701.txt">
-			<input type="hidden" name="title" value="Moby Dick; Or, The Whale">
-			<input type="hidden" name="authors" value="Melville, Herman">
-		      </form>
-		 </li>
-	 	 <li>
-		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form3').submit();">
-			      'Alice's Adventures in Wonderland' by Lewis Carroll
-		      </a>
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Moby Dick; Or, The Whale by Melville, Herman
+                  </a>
 
-		      <form id="form3" action="/analyse" method="post" style="display:none;">
-			<input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/11.txt.utf-8">
-			<input type="hidden" name="title" value="Alice's Adventures in Wonderland">
-			<input type="hidden" name="authors" value="Carroll, Lewis">
-		      </form>
-		 </li>
-	 	 <li>
-		      <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form4').submit();">
-			      'The Critique of Pure Reason' by Kant
-		      </a>
+                      <form id="form0" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/2701.txt.utf-8">
+                        <input type="hidden" name="title" value="Moby Dick; Or, The Whale">
+                        <input type="hidden" name="authors" value="Melville, Herman">
+                      </form>
+                </li>
+        
 
-		      <form id="form4" action="/analyse" method="post" style="display:none;">
-			<input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/4280.txt.utf-8">
-			<input type="hidden" name="title" value="The Critique of Pure Reason">
-			<input type="hidden" name="authors" value="Kant, Immanuel">
-		      </form>
-		 </li>
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Pride and Prejudice by Austen, Jane
+                  </a>
+
+                      <form id="form1" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1342.txt.utf-8">
+                        <input type="hidden" name="title" value="Pride and Prejudice">
+                        <input type="hidden" name="authors" value="Austen, Jane">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Frankenstein; or, the modern prometheus by Shelley, Mary Wollstonecraft
+                  </a>
+
+                      <form id="form2" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/84.txt.utf-8">
+                        <input type="hidden" name="title" value="Frankenstein; or, the modern prometheus">
+                        <input type="hidden" name="authors" value="Shelley, Mary Wollstonecraft">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The City of God, Volume I by Augustine, of Hippo, Saint
+                  </a>
+
+                      <form id="form3" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/45304.txt.utf-8">
+                        <input type="hidden" name="title" value="The City of God, Volume I">
+                        <input type="hidden" name="authors" value="Augustine, of Hippo, Saint">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Romeo and Juliet by Shakespeare, William
+                  </a>
+
+                      <form id="form4" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1513.txt.utf-8">
+                        <input type="hidden" name="title" value="Romeo and Juliet">
+                        <input type="hidden" name="authors" value="Shakespeare, William">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Crime and Punishment by Dostoyevsky, Fyodor
+                  </a>
+
+                      <form id="form5" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/2554.txt.utf-8">
+                        <input type="hidden" name="title" value="Crime and Punishment">
+                        <input type="hidden" name="authors" value="Dostoyevsky, Fyodor">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Count of Monte Cristo by Dumas, Alexandre, Maquet, Auguste
+                  </a>
+
+                      <form id="form6" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1184.txt.utf-8">
+                        <input type="hidden" name="title" value="The Count of Monte Cristo">
+                        <input type="hidden" name="authors" value="Dumas, Alexandre, Maquet, Auguste">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  A Room with a View by Forster, E. M. (Edward Morgan)
+                  </a>
+
+                      <form id="form7" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/2641.txt.utf-8">
+                        <input type="hidden" name="title" value="A Room with a View">
+                        <input type="hidden" name="authors" value="Forster, E. M. (Edward Morgan)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Blue Castle: a novel by Montgomery, L. M. (Lucy Maud)
+                  </a>
+
+                      <form id="form8" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/67979.txt.utf-8">
+                        <input type="hidden" name="title" value="The Blue Castle: a novel">
+                        <input type="hidden" name="authors" value="Montgomery, L. M. (Lucy Maud)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Alice's Adventures in Wonderland by Carroll, Lewis
+                  </a>
+
+                      <form id="form9" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/11.txt.utf-8">
+                        <input type="hidden" name="title" value="Alice's Adventures in Wonderland">
+                        <input type="hidden" name="authors" value="Carroll, Lewis">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Middlemarch by Eliot, George
+                  </a>
+
+                      <form id="form10" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/145.txt.utf-8">
+                        <input type="hidden" name="title" value="Middlemarch">
+                        <input type="hidden" name="authors" value="Eliot, George">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Complete Works of William Shakespeare by Shakespeare, William
+                  </a>
+
+                      <form id="form11" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/100.txt.utf-8">
+                        <input type="hidden" name="title" value="The Complete Works of William Shakespeare">
+                        <input type="hidden" name="authors" value="Shakespeare, William">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The strange case of Dr. Jekyll and Mr. Hyde by Stevenson, Robert Louis
+                  </a>
+
+                      <form id="form12" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/43.txt.utf-8">
+                        <input type="hidden" name="title" value="The strange case of Dr. Jekyll and Mr. Hyde">
+                        <input type="hidden" name="authors" value="Stevenson, Robert Louis">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Little Women; Or, Meg, Jo, Beth, and Amy by Alcott, Louisa May
+                  </a>
+
+                      <form id="form13" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/37106.txt.utf-8">
+                        <input type="hidden" name="title" value="Little Women; Or, Meg, Jo, Beth, and Amy">
+                        <input type="hidden" name="authors" value="Alcott, Louisa May">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  My Life — Volume 1 by Wagner, Richard
+                  </a>
+
+                      <form id="form14" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/5197.txt.utf-8">
+                        <input type="hidden" name="title" value="My Life — Volume 1">
+                        <input type="hidden" name="authors" value="Wagner, Richard">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Secret of Chimneys by Christie, Agatha
+                  </a>
+
+                      <form id="form15" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/65238.txt.utf-8">
+                        <input type="hidden" name="title" value="The Secret of Chimneys">
+                        <input type="hidden" name="authors" value="Christie, Agatha">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Jane Eyre: An Autobiography by Brontë, Charlotte
+                  </a>
+
+                      <form id="form16" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1260.txt.utf-8">
+                        <input type="hidden" name="title" value="Jane Eyre: An Autobiography">
+                        <input type="hidden" name="authors" value="Brontë, Charlotte">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The King in Yellow by Chambers, Robert W. (Robert William)
+                  </a>
+
+                      <form id="form17" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/8492.txt.utf-8">
+                        <input type="hidden" name="title" value="The King in Yellow">
+                        <input type="hidden" name="authors" value="Chambers, Robert W. (Robert William)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Adventures of Sherlock Holmes by Doyle, Arthur Conan
+                  </a>
+
+                      <form id="form18" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1661.txt.utf-8">
+                        <input type="hidden" name="title" value="The Adventures of Sherlock Holmes">
+                        <input type="hidden" name="authors" value="Doyle, Arthur Conan">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Dracula by Stoker, Bram
+                  </a>
+
+                      <form id="form19" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/345.txt.utf-8">
+                        <input type="hidden" name="title" value="Dracula">
+                        <input type="hidden" name="authors" value="Stoker, Bram">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Twenty years after by Dumas, Alexandre, Maquet, Auguste
+                  </a>
+
+                      <form id="form20" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/1259.txt.utf-8">
+                        <input type="hidden" name="title" value="Twenty years after">
+                        <input type="hidden" name="authors" value="Dumas, Alexandre, Maquet, Auguste">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Brothers Karamazov by Dostoyevsky, Fyodor
+                  </a>
+
+                      <form id="form21" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/28054.txt.utf-8">
+                        <input type="hidden" name="title" value="The Brothers Karamazov">
+                        <input type="hidden" name="authors" value="Dostoyevsky, Fyodor">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Enchanted April by Von Arnim, Elizabeth
+                  </a>
+
+                      <form id="form22" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/16389.txt.utf-8">
+                        <input type="hidden" name="title" value="The Enchanted April">
+                        <input type="hidden" name="authors" value="Von Arnim, Elizabeth">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Adventures of Huckleberry Finn by Twain, Mark
+                  </a>
+
+                      <form id="form23" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/76.txt.utf-8">
+                        <input type="hidden" name="title" value="Adventures of Huckleberry Finn">
+                        <input type="hidden" name="authors" value="Twain, Mark">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Le Fantôme de l'Opéra by Leroux, Gaston
+                  </a>
+
+                      <form id="form24" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/62215.txt.utf-8">
+                        <input type="hidden" name="title" value="Le Fantôme de l'Opéra">
+                        <input type="hidden" name="authors" value="Leroux, Gaston">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Great Gatsby by Fitzgerald, F. Scott (Francis Scott)
+                  </a>
+
+                      <form id="form25" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/64317.txt.utf-8">
+                        <input type="hidden" name="title" value="The Great Gatsby">
+                        <input type="hidden" name="authors" value="Fitzgerald, F. Scott (Francis Scott)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Expedition of Humphry Clinker by Smollett, T. (Tobias)
+                  </a>
+
+                      <form id="form26" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/2160.txt.utf-8">
+                        <input type="hidden" name="title" value="The Expedition of Humphry Clinker">
+                        <input type="hidden" name="authors" value="Smollett, T. (Tobias)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Cranford by Gaskell, Elizabeth Cleghorn
+                  </a>
+
+                      <form id="form27" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/394.txt.utf-8">
+                        <input type="hidden" name="title" value="Cranford">
+                        <input type="hidden" name="authors" value="Gaskell, Elizabeth Cleghorn">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The String of Pearls; Or, The Barber of Fleet Street. A Domestic Romance. by Prest, Thomas Peckett, Rymer, James Malcolm
+                  </a>
+
+                      <form id="form28" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/59828.txt.utf-8">
+                        <input type="hidden" name="title" value="The String of Pearls; Or, The Barber of Fleet Street. A Domestic Romance.">
+                        <input type="hidden" name="authors" value="Prest, Thomas Peckett, Rymer, James Malcolm">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  The Adventures of Ferdinand Count Fathom — Complete by Smollett, T. (Tobias)
+                  </a>
+
+                      <form id="form29" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/6761.txt.utf-8">
+                        <input type="hidden" name="title" value="The Adventures of Ferdinand Count Fathom — Complete">
+                        <input type="hidden" name="authors" value="Smollett, T. (Tobias)">
+                      </form>
+                </li>
+        
+
+                <li>
+                  <a href="/analyse" onclick="event.preventDefault(); document.getElementById('form1').submit();">
+                  Wuthering Heights by Brontë, Emily
+                  </a>
+
+                      <form id="form30" action="/analyse" method="post" style="display:none;">
+                        <input type="hidden" name="book_url" value="https://www.gutenberg.org/ebooks/768.txt.utf-8">
+                        <input type="hidden" name="title" value="Wuthering Heights">
+                        <input type="hidden" name="authors" value="Brontë, Emily">
+                      </form>
+                </li>
+        
 		</ul>
         {% endif %}
-
 {% endblock %}
-
